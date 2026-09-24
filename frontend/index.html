@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Cricket Shot Recognition</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+
+<body>
+
+    <!-- Background -->
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+
+    <!-- Main Container -->
+    <main class="container">
+
+
+        <!-- ==================================================
+             HEADER
+        =================================================== -->
+
+        <header class="header">
+
+            <div>
+
+                <div class="eyebrow">
+                    AI SPORTS ANALYTICS
+                </div>
+
+                <h1>
+                    Cricket Shot
+                    <span>Recognition</span>
+                </h1>
+
+                <p class="subtitle">
+                    Upload a cricket video and let VideoMAE
+                    identify the batting shot.
+                </p>
+
+            </div>
+
+
+            <div class="model-badge">
+
+                <span class="status-dot"></span>
+
+                VideoMAE-Small
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==================================================
+             WORKSPACE
+        =================================================== -->
+
+        <section class="workspace">
+
+
+            <!-- =================================================
+                 LEFT PANEL
+            ================================================== -->
+
+            <div class="panel">
+
+                <div class="section-title">
+
+                    <span>01</span>
+
+                    UPLOAD VIDEO
+
+                </div>
+
+
+
+                <!-- UPLOAD BOX -->
+
+                <div
+                    id="uploadBox"
+                    class="upload-box"
+                >
+
+                    <input
+                        type="file"
+                        id="videoInput"
+                        accept="video/*"
+                        hidden
+                    >
+
+
+                    <!-- Placeholder -->
+
+                    <div
+                        id="previewPlaceholder"
+                        class="upload-placeholder"
+                    >
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+
+                        <h2>
+                            Upload Cricket Video
+                        </h2>
+
+
+                        <p>
+                            Choose a video from your computer
+                        </p>
+
+
+                        <button
+                            id="chooseButton"
+                            class="secondary-button"
+                            type="button"
+                        >
+                            Choose Video
+                        </button>
+
+
+                        <small>
+                            MP4 • MOV • AVI
+                        </small>
+
+                    </div>
+
+
+                    <!-- Video Preview -->
+
+                    <video
+                        id="videoPreview"
+                        controls
+                    ></video>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FILE INFORMATION
+                ================================================== -->
+
+                <div
+                    id="fileCard"
+                    class="file-card"
+                >
+
+                    <div class="file-icon">
+                        ▶
+                    </div>
+
+
+                    <div class="file-details">
+
+                        <strong id="selectedFile">
+                            No video selected
+                        </strong>
+
+
+                        <span id="fileSize">
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        id="removeButton"
+                        class="remove-button"
+                        type="button"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     EVALUATE BUTTON
+                ================================================== -->
+
+                <button
+                    id="analyzeButton"
+                    class="evaluate-button"
+                    type="button"
+                >
+
+                    <span id="buttonIcon">
+                        ✦
+                    </span>
+
+
+                    <span id="buttonText">
+                        Evaluate Shot
+                    </span>
+
+                </button>
+
+
+
+                <!-- Connection status -->
+
+                <div
+                    id="connectionStatus"
+                    class="connection-status"
+                >
+                    Ready
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RIGHT PANEL
+            ================================================== -->
+
+            <div class="panel results-panel">
+
+
+                <div class="section-title">
+
+                    <span>02</span>
+
+                    AI ANALYSIS
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MAIN RESULT
+                ================================================== -->
+
+                <div class="main-result">
+
+                    <div class="result-label">
+                        PREDICTED SHOT
+                    </div>
+
+
+                    <h2 id="prediction">
+                        —
+                    </h2>
+
+
+                    <div class="confidence-row">
+
+                        <span>
+                            Confidence
+                        </span>
+
+
+                        <strong id="confidence">
+                            --%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress-track">
+
+                        <div
+                            id="confidenceBar"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TOP 3 PREDICTIONS
+                ================================================== -->
+
+                <div class="top-section">
+
+                    <h3>
+                        Top Predictions
+                    </h3>
+
+
+
+                    <!-- TOP 1 -->
+
+                    <div class="prediction-item">
+
+                        <div class="prediction-info">
+
+                            <div class="rank">
+                                01
+                            </div>
+
+
+                            <div>
+
+                                <strong id="top1Name">
+                                    —
+                                </strong>
+
+
+                                <span id="top1Score">
+                                    --%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="small-progress">
+
+                            <div
+                                id="top1Bar"
+                                class="small-progress-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TOP 2 -->
+
+                    <div class="prediction-item">
+
+                        <div class="prediction-info">
+
+                            <div class="rank">
+                                02
+                            </div>
+
+
+                            <div>
+
+                                <strong id="top2Name">
+                                    —
+                                </strong>
+
+
+                                <span id="top2Score">
+                                    --%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="small-progress">
+
+                            <div
+                                id="top2Bar"
+                                class="small-progress-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TOP 3 -->
+
+                    <div class="prediction-item">
+
+                        <div class="prediction-info">
+
+                            <div class="rank">
+                                03
+                            </div>
+
+
+                            <div>
+
+                                <strong id="top3Name">
+                                    —
+                                </strong>
+
+
+                                <span id="top3Score">
+                                    --%
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="small-progress">
+
+                            <div
+                                id="top3Bar"
+                                class="small-progress-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MODEL INFORMATION
+                ================================================== -->
+
+                <div class="model-info">
+
+
+                    <div>
+
+                        <span>
+                            MODEL
+                        </span>
+
+                        <strong>
+                            VideoMAE-Small
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            FRAMES
+                        </span>
+
+                        <strong>
+                            16
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            CLASSES
+                        </span>
+
+                        <strong>
+                            10
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             FOOTER
+        =================================================== -->
+
+        <footer>
+
+            Cricket Shot Recognition
+
+            <span>•</span>
+
+            AI-powered video classification
+
+        </footer>
+
+    </main>
+
+
+
+    <!-- ==================================================
+         JAVASCRIPT
+    =================================================== -->
+
+    <script src="./script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,921 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+html,
+body {
+    min-height: 100%;
+}
+
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background: #07100d;
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.background {
+
+    position: fixed;
+
+    inset: 0;
+
+    background-image:
+        url("./cricket-bg.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    z-index: -2;
+}
+
+
+.overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(3, 12, 8, 0.88),
+            rgba(5, 20, 13, 0.70)
+        );
+
+    z-index: -1;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+
+    width: min(
+        1200px,
+        92%
+    );
+
+    margin: auto;
+
+    padding:
+        50px 0
+        30px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 40px;
+}
+
+
+.eyebrow {
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
+
+    color:
+        rgba(255,255,255,0.65);
+}
+
+
+h1 {
+
+    font-size:
+        clamp(
+            40px,
+            6vw,
+            70px
+        );
+
+    line-height: 0.95;
+
+    letter-spacing: -3px;
+}
+
+
+h1 span {
+
+    display: block;
+
+    color: #78ff9b;
+}
+
+
+.subtitle {
+
+    margin-top: 18px;
+
+    max-width: 580px;
+
+    color:
+        rgba(255,255,255,0.68);
+
+    font-size: 16px;
+
+    line-height: 1.6;
+}
+
+
+.model-badge {
+
+    padding:
+        12px 18px;
+
+    border:
+        1px solid
+        rgba(120,255,155,0.3);
+
+    border-radius: 50px;
+
+    background:
+        rgba(0,0,0,0.35);
+
+    white-space: nowrap;
+
+    font-size: 13px;
+}
+
+
+.status-dot {
+
+    display: inline-block;
+
+    width: 8px;
+
+    height: 8px;
+
+    margin-right: 8px;
+
+    border-radius: 50%;
+
+    background:
+        #78ff9b;
+
+    box-shadow:
+        0 0 12px
+        #78ff9b;
+}
+
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.workspace {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 24px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel {
+
+    padding: 26px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    border-radius: 22px;
+
+    background:
+        rgba(8,18,13,0.72);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,0.25);
+}
+
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    font-weight: bold;
+}
+
+
+.section-title span {
+
+    color:
+        #78ff9b;
+}
+
+
+/* =========================================================
+   UPLOAD BOX
+========================================================= */
+
+.upload-box {
+
+    min-height: 290px;
+
+    border:
+        1px dashed
+        rgba(120,255,155,0.35);
+
+    border-radius: 18px;
+
+    background:
+        rgba(0,0,0,0.18);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    transition:
+        0.25s;
+}
+
+
+.upload-box:hover {
+
+    border-color:
+        #78ff9b;
+
+    background:
+        rgba(120,255,155,0.06);
+}
+
+
+.upload-box.dragging {
+
+    border-color:
+        #78ff9b;
+
+    background:
+        rgba(120,255,155,0.10);
+}
+
+
+.upload-placeholder {
+
+    width: 100%;
+
+    padding: 35px;
+
+    text-align: center;
+}
+
+
+.upload-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    margin:
+        auto auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(120,255,155,0.1);
+
+    color:
+        #78ff9b;
+
+    font-size: 30px;
+}
+
+
+.upload-placeholder h2 {
+
+    font-size: 21px;
+
+    margin-bottom: 8px;
+}
+
+
+.upload-placeholder p {
+
+    color:
+        rgba(255,255,255,0.55);
+
+    margin-bottom: 20px;
+}
+
+
+.upload-placeholder small {
+
+    display: block;
+
+    margin-top: 15px;
+
+    color:
+        rgba(255,255,255,0.4);
+}
+
+
+/* =========================================================
+   CHOOSE BUTTON
+========================================================= */
+
+.secondary-button {
+
+    padding:
+        12px 22px;
+
+    border:
+        1px solid
+        rgba(120,255,155,0.4);
+
+    border-radius: 10px;
+
+    background:
+        rgba(120,255,155,0.08);
+
+    color:
+        #78ff9b;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition:
+        0.2s;
+}
+
+
+.secondary-button:hover {
+
+    background:
+        rgba(120,255,155,0.16);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+#videoPreview {
+
+    width: 100%;
+
+    height: 290px;
+
+    object-fit: contain;
+
+    background: #000;
+
+    display: none;
+}
+
+
+/* =========================================================
+   FILE CARD
+========================================================= */
+
+.file-card {
+
+    display: none;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,0.06);
+}
+
+
+.file-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background:
+        rgba(120,255,155,0.12);
+
+    color:
+        #78ff9b;
+}
+
+
+.file-details {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.file-details strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.file-details span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    color:
+        rgba(255,255,255,0.45);
+}
+
+
+.remove-button {
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        rgba(255,255,255,0.5);
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+
+.remove-button:hover {
+
+    color: white;
+}
+
+
+/* =========================================================
+   EVALUATE
+========================================================= */
+
+.evaluate-button {
+
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 17px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        #78ff9b;
+
+    color:
+        #061009;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        0.2s;
+}
+
+
+.evaluate-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 30px
+        rgba(120,255,155,0.2);
+}
+
+
+.evaluate-button:disabled {
+
+    opacity: 0.6;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   CONNECTION STATUS
+========================================================= */
+
+.connection-status {
+
+    margin-top: 12px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.5);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.main-result {
+
+    padding: 25px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(120,255,155,0.10),
+            rgba(255,255,255,0.03)
+        );
+
+    border:
+        1px solid
+        rgba(120,255,155,0.16);
+}
+
+
+.result-label {
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color:
+        rgba(255,255,255,0.5);
+}
+
+
+.main-result h2 {
+
+    margin:
+        12px 0 25px;
+
+    font-size: 42px;
+
+    text-transform:
+        capitalize;
+
+    color:
+        #78ff9b;
+}
+
+
+.confidence-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    color:
+        rgba(255,255,255,0.6);
+
+    font-size: 13px;
+}
+
+
+.confidence-row strong {
+
+    color: white;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-track {
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,0.1);
+
+    border-radius: 20px;
+
+    height: 9px;
+
+    margin-top: 10px;
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        #78ff9b;
+
+    border-radius: inherit;
+
+    transition:
+        width 0.5s ease;
+}
+
+
+/* =========================================================
+   TOP PREDICTIONS
+========================================================= */
+
+.top-section {
+
+    margin-top: 28px;
+}
+
+
+.top-section h3 {
+
+    margin-bottom: 18px;
+
+    font-size: 16px;
+}
+
+
+.prediction-item {
+
+    margin-bottom: 17px;
+}
+
+
+.prediction-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.rank {
+
+    color:
+        #78ff9b;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+.prediction-info strong {
+
+    display: inline-block;
+
+    min-width: 110px;
+
+    text-transform:
+        capitalize;
+}
+
+
+.prediction-info span {
+
+    color:
+        rgba(255,255,255,0.55);
+
+    font-size: 13px;
+}
+
+
+.small-progress {
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,0.1);
+
+    border-radius: 20px;
+
+    height: 5px;
+
+    margin-top: 8px;
+
+    margin-left: 30px;
+}
+
+
+.small-progress-fill {
+
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        #78ff9b;
+
+    transition:
+        width 0.5s ease;
+}
+
+
+/* =========================================================
+   MODEL INFO
+========================================================= */
+
+.model-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.1);
+}
+
+
+.model-info div {
+
+    text-align: center;
+}
+
+
+.model-info span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        rgba(255,255,255,0.4);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+.model-info strong {
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    padding-top: 25px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 12px;
+}
+
+
+footer span {
+
+    margin: 0 8px;
+
+    color:
+        #78ff9b;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .workspace {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .header {
+
+        flex-direction:
+            column;
+    }
+
+
+    .model-badge {
+
+        align-self:
+            flex-start;
+    }
+
+
+    h1 {
+
+        font-size: 48px;
+    }
+
+}

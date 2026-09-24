@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+
+# Uploaded temporary videos
+backend/uploads/
+
+# Model files
+*.pt
+*.pth
+*.bin
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
