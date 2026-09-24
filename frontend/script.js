@@ -1,31 +1,21 @@
 // ============================================================
-// CRICKET SHOT RECOGNITION
-// FRONTEND JAVASCRIPT
-// ============================================================
-
-
-// ============================================================
-// FASTAPI ENDPOINT
+// CRICKET SHOT RECOGNITION - FRONTEND
 // ============================================================
 
 const API_URL = "http://127.0.0.1:8000/predict";
 
 
 // ============================================================
-// WAIT FOR PAGE
+// WAIT UNTIL HTML IS FULLY LOADED
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("====================================");
-    console.log("CRICKET SHOT RECOGNITION");
-    console.log("Frontend loaded");
-    console.log("API:", API_URL);
-    console.log("====================================");
+    console.log("Frontend loaded successfully");
 
 
     // ========================================================
-    // HTML ELEMENTS
+    // GET ELEMENTS
     // ========================================================
 
     const videoInput =
@@ -34,14 +24,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const chooseButton =
         document.getElementById("chooseButton");
 
-    const uploadBox =
-        document.getElementById("uploadBox");
+    const changeVideoButton =
+        document.getElementById("changeVideoButton");
+
+    const videoPreview =
+        document.getElementById("videoPreview");
 
     const previewPlaceholder =
         document.getElementById("previewPlaceholder");
 
-    const videoPreview =
-        document.getElementById("videoPreview");
+    const uploadBox =
+        document.getElementById("uploadBox");
 
     const fileCard =
         document.getElementById("fileCard");
@@ -58,11 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const analyzeButton =
         document.getElementById("analyzeButton");
 
-    const buttonIcon =
-        document.getElementById("buttonIcon");
-
     const buttonText =
         document.getElementById("buttonText");
+
+    const buttonIcon =
+        document.getElementById("buttonIcon");
 
     const connectionStatus =
         document.getElementById("connectionStatus");
@@ -82,59 +75,57 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("confidenceBar");
 
 
-
     // ========================================================
-    // ELEMENT CHECK
+    // CHECK ELEMENTS
     // ========================================================
 
-    if (
-        !videoInput ||
-        !chooseButton ||
-        !uploadBox ||
-        !previewPlaceholder ||
-        !videoPreview ||
-        !fileCard ||
-        !selectedFile ||
-        !fileSize ||
-        !removeButton ||
-        !analyzeButton ||
-        !buttonIcon ||
-        !buttonText ||
-        !connectionStatus ||
-        !prediction ||
-        !confidence ||
-        !confidenceBar
-    ) {
+    console.log("videoInput:", videoInput);
+    console.log("chooseButton:", chooseButton);
+    console.log("changeVideoButton:", changeVideoButton);
+    console.log("analyzeButton:", analyzeButton);
 
-        console.error(
-            "Some HTML elements are missing."
-        );
-
-        return;
-    }
-
-
-    console.log(
-        "All HTML elements found."
-    );
-
+    console.log("FastAPI:", API_URL);
 
 
     // ========================================================
     // CHOOSE VIDEO
     // ========================================================
 
-    chooseButton.addEventListener(
+    chooseButton.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log("Choose Video clicked");
+
+        videoInput.click();
+
+    });
+
+
+    // ========================================================
+    // CHOOSE ANOTHER VIDEO
+    // ========================================================
+
+    changeVideoButton.addEventListener(
         "click",
         function (event) {
 
             event.preventDefault();
-
             event.stopPropagation();
 
             console.log(
-                "Choose Video clicked"
+                "Choose Another Video clicked"
             );
+
+            /*
+             * Clear the input first.
+             *
+             * This allows the user to choose the
+             * exact same video again if needed.
+             */
+
+            videoInput.value = "";
 
             videoInput.click();
 
@@ -142,212 +133,165 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-
     // ========================================================
     // VIDEO SELECTED
     // ========================================================
 
-    videoInput.addEventListener(
-        "change",
-        function () {
+    videoInput.addEventListener("change", function (event) {
 
-            const file =
-                videoInput.files[0];
+        event.preventDefault();
 
+        const file = videoInput.files[0];
 
-            if (!file) {
-                return;
-            }
-
-
-            console.log(
-                "Selected video:",
-                file.name
-            );
-
-
-            // ------------------------------------------------
-            // CHECK FILE
-            // ------------------------------------------------
-
-            if (
-                !file.type.startsWith("video/")
-            ) {
-
-                alert(
-                    "Please select a video file."
-                );
-
-                videoInput.value = "";
-
-                return;
-            }
-
-
-            // ------------------------------------------------
-            // SHOW VIDEO
-            // ------------------------------------------------
-
-            showVideo(file);
-
-
-            // ------------------------------------------------
-            // SHOW FILE INFORMATION
-            // ------------------------------------------------
-
-            selectedFile.textContent =
-                file.name;
-
-
-            fileSize.textContent =
-                formatFileSize(file.size);
-
-
-            fileCard.style.display =
-                "flex";
-
-
-            // ------------------------------------------------
-            // RESET PREVIOUS RESULT
-            // ------------------------------------------------
-
-            resetResults();
-
-
-            connectionStatus.textContent =
-                "Video ready for evaluation";
-
-
-            connectionStatus.style.color =
-                "rgba(255,255,255,0.5)";
-
+        if (!file) {
+            return;
         }
-    );
 
 
+        console.log("Selected:", file.name);
 
-    // ========================================================
-    // SHOW VIDEO PREVIEW
-    // ========================================================
 
-    function showVideo(file) {
+        // ====================================================
+        // CHECK FILE
+        // ====================================================
+
+        const validVideo =
+            file.type.startsWith("video/") ||
+            /\.(mp4|mov|avi|mkv|webm)$/i.test(file.name);
+
+
+        if (!validVideo) {
+
+            alert("Please select a video file.");
+
+            videoInput.value = "";
+
+            return;
+        }
+
+
+        // ====================================================
+        // PREVIEW VIDEO
+        // ====================================================
 
         const videoURL =
             URL.createObjectURL(file);
 
-
         videoPreview.src =
             videoURL;
-
 
         videoPreview.style.display =
             "block";
 
-
         previewPlaceholder.style.display =
             "none";
 
-    }
 
+        // ====================================================
+        // SHOW CHOOSE ANOTHER BUTTON
+        // ====================================================
+
+        changeVideoButton.style.display =
+            "block";
+
+
+        // ====================================================
+        // FILE INFORMATION
+        // ====================================================
+
+        selectedFile.textContent =
+            file.name;
+
+        fileSize.textContent =
+            formatFileSize(file.size);
+
+        fileCard.style.display =
+            "flex";
+
+
+        // ====================================================
+        // RESET OLD RESULTS
+        // ====================================================
+
+        resetResults();
+
+
+        connectionStatus.textContent =
+            "Video ready for evaluation";
+
+    });
 
 
     // ========================================================
     // REMOVE VIDEO
     // ========================================================
 
-    removeButton.addEventListener(
-        "click",
-        function (event) {
+    removeButton.addEventListener("click", function (event) {
 
-            event.preventDefault();
-
-            event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
 
-            console.log(
-                "Removing selected video"
-            );
+        videoInput.value = "";
+
+        videoPreview.pause();
+
+        videoPreview.removeAttribute("src");
+
+        videoPreview.load();
+
+        videoPreview.style.display =
+            "none";
+
+        previewPlaceholder.style.display =
+            "block";
+
+        fileCard.style.display =
+            "none";
 
 
-            videoInput.value = "";
+        // Hide Choose Another Video button
+
+        changeVideoButton.style.display =
+            "none";
 
 
-            videoPreview.pause();
+        selectedFile.textContent =
+            "No video selected";
 
-            videoPreview.removeAttribute(
-                "src"
-            );
-
-            videoPreview.load();
+        fileSize.textContent =
+            "--";
 
 
-            videoPreview.style.display =
-                "none";
+        resetResults();
 
 
-            previewPlaceholder.style.display =
-                "block";
+        connectionStatus.textContent =
+            "Ready";
 
-
-            fileCard.style.display =
-                "none";
-
-
-            selectedFile.textContent =
-                "No video selected";
-
-
-            fileSize.textContent =
-                "--";
-
-
-            resetResults();
-
-
-            connectionStatus.textContent =
-                "Ready";
-
-        }
-    );
-
+    });
 
 
     // ========================================================
-    // EVALUATE BUTTON
+    // EVALUATE VIDEO
     // ========================================================
 
     analyzeButton.addEventListener(
         "click",
         async function (event) {
 
-
-            // =================================================
-            // CRITICAL
-            // STOP PAGE RELOAD
-            // =================================================
+            // VERY IMPORTANT
+            // Prevent page reload
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
             console.log("");
-            console.log(
-                "===================================="
-            );
+            console.log("================================");
+            console.log("EVALUATE BUTTON CLICKED");
+            console.log("================================");
 
-            console.log(
-                "EVALUATE BUTTON CLICKED"
-            );
-
-            console.log(
-                "===================================="
-            );
-
-
-            // =================================================
-            // GET FILE
-            // =================================================
 
             const file =
                 videoInput.files[0];
@@ -356,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!file) {
 
                 alert(
-                    "Please upload a cricket video first."
+                    "Please choose a cricket video first."
                 );
 
                 return;
@@ -364,22 +308,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             console.log(
-                "Sending video:",
+                "Sending:",
                 file.name
             );
 
 
             // =================================================
-            // LOADING STATE
+            // BUTTON LOADING STATE
             // =================================================
 
             analyzeButton.disabled =
                 true;
 
-
             buttonText.textContent =
                 "Evaluating...";
-
 
             buttonIcon.textContent =
                 "⏳";
@@ -392,14 +334,11 @@ document.addEventListener("DOMContentLoaded", function () {
             prediction.textContent =
                 "Analyzing...";
 
-
             confidence.textContent =
                 "--%";
 
-
             confidenceBar.style.width =
                 "0%";
-
 
 
             // =================================================
@@ -409,17 +348,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData =
                 new FormData();
 
-
             formData.append(
                 "file",
                 file
             );
 
-
-
-            // =================================================
-            // SEND TO FASTAPI
-            // =================================================
 
             try {
 
@@ -428,11 +361,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
-                console.log(
-                    "POST",
-                    API_URL
-                );
-
+                // =================================================
+                // SEND REQUEST
+                // =================================================
 
                 const response =
                     await fetch(
@@ -445,13 +376,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 console.log(
-                    "HTTP status:",
+                    "Response status:",
                     response.status
                 );
 
 
                 // =================================================
-                // READ JSON
+                // GET JSON
                 // =================================================
 
                 const data =
@@ -459,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 console.log(
-                    "FastAPI response:",
+                    "Response from FastAPI:",
                     data
                 );
 
@@ -472,15 +403,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     throw new Error(
                         data.detail ||
-                        "Prediction failed."
+                        "Prediction failed"
                     );
 
                 }
 
 
-
                 // =================================================
-                // DISPLAY MAIN RESULT
+                // DISPLAY MAIN PREDICTION
                 // =================================================
 
                 prediction.textContent =
@@ -488,12 +418,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 confidence.textContent =
-                    `${data.confidence}%`;
+                    `${Number(
+                        data.confidence
+                    ).toFixed(2)}%`;
 
 
                 confidenceBar.style.width =
                     `${data.confidence}%`;
-
 
 
                 // =================================================
@@ -502,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (
                     data.top_predictions &&
-                    data.top_predictions.length > 0
+                    data.top_predictions.length >= 1
                 ) {
 
                     updatePrediction(
@@ -510,12 +441,26 @@ document.addEventListener("DOMContentLoaded", function () {
                         data.top_predictions[0]
                     );
 
+                }
+
+
+                if (
+                    data.top_predictions &&
+                    data.top_predictions.length >= 2
+                ) {
 
                     updatePrediction(
                         2,
                         data.top_predictions[1]
                     );
 
+                }
+
+
+                if (
+                    data.top_predictions &&
+                    data.top_predictions.length >= 3
+                ) {
 
                     updatePrediction(
                         3,
@@ -523,7 +468,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
                 }
-
 
 
                 // =================================================
@@ -534,43 +478,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     "✓ Evaluation complete";
 
 
-                connectionStatus.style.color =
-                    "#78ff9b";
-
-
                 console.log("");
                 console.log(
-                    "===================================="
+                    "PREDICTION DISPLAYED:"
                 );
 
                 console.log(
-                    "PREDICTION DISPLAYED"
-                );
-
-                console.log(
-                    "Shot:",
                     data.prediction
                 );
 
                 console.log(
-                    "Confidence:",
                     data.confidence + "%"
-                );
-
-                console.log(
-                    "===================================="
                 );
 
 
             } catch (error) {
 
-
-                // =================================================
-                // ERROR
-                // =================================================
-
                 console.error(
-                    "Prediction error:",
+                    "Frontend prediction error:",
                     error
                 );
 
@@ -591,40 +516,34 @@ document.addEventListener("DOMContentLoaded", function () {
                     "✕ Failed to connect to FastAPI";
 
 
-                connectionStatus.style.color =
-                    "#ff7777";
-
-
                 alert(
                     "Could not evaluate video.\n\n" +
                     error.message
                 );
 
+            } finally {
+
+                // =================================================
+                // RESTORE BUTTON
+                // =================================================
+
+                analyzeButton.disabled =
+                    false;
+
+                buttonText.textContent =
+                    "Evaluate Shot";
+
+                buttonIcon.textContent =
+                    "✦";
+
             }
-
-
-            // =================================================
-            // RESTORE BUTTON
-            // =================================================
-
-            analyzeButton.disabled =
-                false;
-
-
-            buttonText.textContent =
-                "Evaluate Shot";
-
-
-            buttonIcon.textContent =
-                "✦";
 
         }
     );
 
 
-
     // ========================================================
-    // DRAG OVER
+    // DRAG & DROP
     // ========================================================
 
     uploadBox.addEventListener(
@@ -633,9 +552,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            event.stopPropagation();
-
-
             uploadBox.classList.add(
                 "dragging"
             );
@@ -643,11 +559,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
-
-
-    // ========================================================
-    // DRAG LEAVE
-    // ========================================================
 
     uploadBox.addEventListener(
         "dragleave",
@@ -661,11 +572,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-
-    // ========================================================
-    // DROP
-    // ========================================================
-
     uploadBox.addEventListener(
         "drop",
         function (event) {
@@ -673,7 +579,6 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
 
             event.stopPropagation();
-
 
             uploadBox.classList.remove(
                 "dragging"
@@ -689,9 +594,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            if (
-                !file.type.startsWith("video/")
-            ) {
+            const validVideo =
+                file.type.startsWith("video/") ||
+                /\.(mp4|mov|avi|mkv|webm)$/i.test(
+                    file.name
+                );
+
+
+            if (!validVideo) {
 
                 alert(
                     "Please drop a video file."
@@ -701,40 +611,56 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            console.log(
-                "Dropped video:",
-                file.name
-            );
-
-
-            // ------------------------------------------------
-            // Put file into input
-            // ------------------------------------------------
+            // Put dropped file into input
 
             const dataTransfer =
                 new DataTransfer();
 
-
-            dataTransfer.items.add(
-                file
-            );
-
+            dataTransfer.items.add(file);
 
             videoInput.files =
                 dataTransfer.files;
 
 
-            // ------------------------------------------------
-            // Trigger normal selection
-            // ------------------------------------------------
+            // Preview
 
-            videoInput.dispatchEvent(
-                new Event("change")
-            );
+            const videoURL =
+                URL.createObjectURL(file);
+
+            videoPreview.src =
+                videoURL;
+
+            videoPreview.style.display =
+                "block";
+
+            previewPlaceholder.style.display =
+                "none";
+
+
+            // Show another video button
+
+            changeVideoButton.style.display =
+                "block";
+
+
+            selectedFile.textContent =
+                file.name;
+
+            fileSize.textContent =
+                formatFileSize(file.size);
+
+            fileCard.style.display =
+                "flex";
+
+
+            resetResults();
+
+
+            connectionStatus.textContent =
+                "Video ready for evaluation";
 
         }
     );
-
 
 
     // ========================================================
@@ -746,18 +672,20 @@ document.addEventListener("DOMContentLoaded", function () {
         result
     ) {
 
+        if (!result) {
+            return;
+        }
+
 
         const name =
             document.getElementById(
                 `top${number}Name`
             );
 
-
         const score =
             document.getElementById(
                 `top${number}Score`
             );
-
 
         const bar =
             document.getElementById(
@@ -775,30 +703,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        if (!result) {
-
-            name.textContent =
-                "—";
-
-
-            score.textContent =
-                "--%";
-
-
-            bar.style.width =
-                "0%";
-
-
-            return;
-        }
-
-
         name.textContent =
             result.shot;
 
 
         score.textContent =
-            `${result.confidence}%`;
+            `${Number(
+                result.confidence
+            ).toFixed(2)}%`;
 
 
         bar.style.width =
@@ -807,21 +719,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     // ========================================================
     // RESET RESULTS
     // ========================================================
 
     function resetResults() {
 
-
         prediction.textContent =
             "—";
 
-
         confidence.textContent =
             "--%";
-
 
         confidenceBar.style.width =
             "0%";
@@ -829,23 +737,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updatePrediction(
             1,
-            null
+            {
+                shot: "—",
+                confidence: 0
+            }
         );
 
 
         updatePrediction(
             2,
-            null
+            {
+                shot: "—",
+                confidence: 0
+            }
         );
 
 
         updatePrediction(
             3,
-            null
+            {
+                shot: "—",
+                confidence: 0
+            }
         );
 
     }
-
 
 
     // ========================================================
@@ -859,39 +775,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        if (bytes < 1024) {
+        const mb =
+            bytes / (1024 * 1024);
+
+
+        if (mb >= 1) {
 
             return (
-                bytes +
-                " Bytes"
-            );
-
-        }
-
-
-        if (
-            bytes <
-            1024 * 1024
-        ) {
-
-            return (
-                (bytes / 1024)
-                .toFixed(1)
-                + " KB"
+                mb.toFixed(2) +
+                " MB"
             );
 
         }
 
 
         return (
-            (bytes /
-                (1024 * 1024))
-                .toFixed(2)
-            + " MB"
+            (bytes / 1024).toFixed(1) +
+            " KB"
         );
 
     }
-
 
 
     // ========================================================
@@ -905,13 +808,8 @@ document.addEventListener("DOMContentLoaded", function () {
         "Ready";
 
 
-    console.log("");
     console.log(
-        "Frontend ready."
-    );
-
-    console.log(
-        "Page reload protection enabled."
+        "Frontend ready. No page reload should occur."
     );
 
 });
