@@ -11,6 +11,7 @@ backend/uploads/
 
 # Model files
 *.pt
+*.pth
 *.bin
 
 # IDE
