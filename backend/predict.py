@@ -1,4 +1,4 @@
-```python
+
 import os
 import cv2
 import torch
@@ -236,4 +236,3 @@ def predict_video(video_path):
         "confidence": best["confidence"],
         "top_predictions": top_predictions
     }
-```
